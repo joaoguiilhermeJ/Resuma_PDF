@@ -1,39 +1,37 @@
-body {
+body{
+    
     background-color: #DF2F47;
+    
+}
+header{
+color: white;
+text-align: center;
 }
 
-header {
-    color: white;
-    text-align: center;
-}
-
-.caixa {
-    width: 500px;
+.caixa{
+    width:500px;
     height: 250px;
     border: 1px dashed black;
     border-radius: 4px;
     padding: 5px;
     position: relative;
 }
-
-section {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    width: 500px;
-    margin: auto;
-    border: 1px solid black;
+section{
+background: white;
+border-radius: 10px;
+padding: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+display: flex;
+width: 500px;
+margin: auto;
+border: black 1px solid;
 }
-
-footer {
-    color: white;
-    text-align: center;
-    font-style: italic;
+footer{
+color: white;
+text-align: center;
+font-style: italic;
 }
-
-.Botao_arquivo {
+.Botao_arquivo{
     width: 150px;
     height: 30px;
     margin-left: 15px;
@@ -45,13 +43,8 @@ footer {
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    text-align: center;
 }
 
-.Botao_arquivo:hover {
-    background-color: rgb(192, 4, 4);
-    color: rgb(233, 158, 158);
-}
 
 .pesquisa-container {
     position: relative;
@@ -70,9 +63,9 @@ footer {
 }
 
 .barra-pesquisa {
-    width: 35%;
-    height: 24px;
-    padding: 4px 8px 4px 28px;
+    width: 35%;           /* deixa mais curta */
+    height: 24px;         /* deixa mais fina */
+    padding: 4px 8px 4px 28px; /* ajusta o espaço para a lupa */
     border: 1px solid #DF2F47;
     border-radius: 10px;
     font-size: 13px;
@@ -81,60 +74,57 @@ footer {
     margin-left: auto;
     margin-right: auto;
 }
-
 img#logo {
     position: absolute;
     top: -30px;
     left: 6px;
-    width: 150px;
-    height: 150px;
+    width: 150px;   /* ajuste o tamanho conforme necessário */
+    height: 150px;  /* ajuste o tamanho conforme necessário */
     margin: 0;
     display: block;
+  /* Centraliza a imagem e adiciona espaço abaixo */
 }
 
 img#lupa {
-    width: 30px;
-    height: 30px;
-    margin-left: -10px;
+    width: 30px;   /* ajuste o tamanho conforme necessário */
+    height: 30px;  /* ajuste o tamanho conforme necessário */
+    margin-left: -10px; /* espaço entre a lupa e a barra de pesquisa */
     vertical-align: middle;
+     /* alinha a lupa verticalmente com o texto */
 }
-
-.arraste-aqui {
-    position: static;
-    width: 150px;
-    height: 150px; /* corrigido: antes estava sem unidade */
+.arraste-aqui{
+    position: static;           
+    width: 150px;               
+    height: 150;
     display: inline-block;
     margin: 0 auto;
 }
-
-.arraste {
+.arraste{
     font: normal 13pt Arial;
-    border: 1px dashed rgba(85, 85, 85, 0.596);
+    border: 1px dashed rgba(85, 85, 85, 0.596);   
     border-radius: 8px;
     padding: 10px;
     position: relative;
-    width: 150px;
-    height: 120px;
-    margin-top: 60px;
-    margin-left: 290px;
+    width: 150px;   
+    height: 120px;           
+    margin-top: 60px;  
+    margin-left: 290px; 
     background: #fff;
-    text-align: center;
+    text-align: center;        
 }
-
 .arraste-aqui.dragover {
     border: 2px dashed #3F5CED;
     opacity: 0.7;
 }
-
-.Botao_arquivo.azul {
+.Botao_arquivo.azul{
     text-align: center;
     margin-top: 15px;
     font: normal 18pt Arial;
     background-color: #3F5CED;
     color: white;
+
     border: none;
 }
-
 .arquivo-info {
     width: 130px;
     height: 20px;
@@ -149,34 +139,32 @@ img#lupa {
     gap: 8px;
     justify-content: center;
 }
-
 .pdf-icon {
     margin-top: 2px;
-    width: 20px; /* corrigido: antes estava escrito "2opx" */
+    width: 2opx;
     height: 20px;
 }
-
 #check-img {
     width: 32px;
     height: 32px;
     vertical-align: middle;
     margin-right: 180px;
     margin-top: 40px;
+    
 }
-
 .arraste.pdf-selecionado {
     width: 190px;
     height: 80px;
-    border: 1px dashed #000000;
+    border: 1px dashed #000000; /* borda tracejada vermelha */
     background: #fff;
     border-radius: 10px;
     background-image: none;
     transition: border-radius 0.3s;
 }
-
-.seta-voltar {
+.seta-voltar{
     width: 32px;
     height: 32px;
+    display: block;
     display: none;
     cursor: pointer;
     font-size: 32px;
@@ -187,11 +175,9 @@ img#lupa {
     z-index: 10;
     transition: color 0.2s;
 }
-
 .seta-voltar:hover {
     color: #222021;
 }
-
 .arquivo-info.erro {
     margin-top: 40px;
     margin-left: 3px;
@@ -199,7 +185,35 @@ img#lupa {
     color: #fff;
 }
 
-#msg-erro {
+#msg-erro{
     text-align: center;
     font-size: small;
+}
+
+#nomes{
+    margin-right: 990px;
+    margin-top: 220px;
+    width: 250px;
+}
+.Botao_arquivo:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#nomes {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom); /* Ajusta pro espaço seguro no celular */
+    left: 0;
+    display: flex;
+    flex-direction: column; /* Um embaixo do outro */
+    align-items: flex-start;
+    gap: 5px;
+    padding: 10px;
+    background: transparent; /* Ou coloque uma cor se precisar contraste */
+}
+
+#nomes p {
+    margin: 0;
+    text-align: left;
+    white-space: normal;
 }

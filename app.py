@@ -38,7 +38,9 @@ def resumir():
         if not texto.strip():
             return jsonify({"erro": "Não foi possível extrair texto do PDF"}), 400
 
-        resumo = resumir_com_spacy(texto, num_sentencas=3)
+        # Obter o número de sentenças do corpo da requisição
+        num_sentencas = int(request.form.get("num_sentencas", 3))  # Padrão para 3
+        resumo = resumir_com_spacy(texto, num_sentencas=num_sentencas)
         resumo = ' '.join(resumo.split())
         session['resumo'] = resumo
         return jsonify({"redirect": url_for('resumo')})

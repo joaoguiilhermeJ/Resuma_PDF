@@ -8,6 +8,7 @@
   const nomeArquivoSpan = document.getElementById('nome-arquivo');
   const textoArraste = document.getElementById('texto-arraste');
   const voltar = document.getElementById('voltar');
+  const botaoArquivo = document.querySelector('.Botao_arquivo');
 
   function isPDF(file) {
     if (!file) return false;
@@ -22,12 +23,20 @@
     if (msgErro) msgErro.style.display = 'none';
     if (nomeArquivoSpan) nomeArquivoSpan.textContent = '';
     if (textoArraste) textoArraste.textContent = 'ARRASTE AQUI';
+    if (botaoArquivo) {
+      botaoArquivo.classList.remove('azul');
+      botaoArquivo.innerHTML = '<strong>SELECIONAR PDF</strong>';
+      botaoArquivo.disabled = false;
+    }
   }
 
   async function enviarArquivo(file) {
     if (!isPDF(file)) {
       if (erroImg) erroImg.style.display = 'inline-block';
-      if (msgErro) msgErro.style.display = 'block';
+      if (msgErro) {
+        msgErro.textContent = 'Formato inválido';
+        msgErro.style.display = 'block';
+      }
       if (nomeArquivoSpan) nomeArquivoSpan.textContent = file ? file.name : '';
       if (checkImg) checkImg.style.display = 'none';
       return;
@@ -38,6 +47,10 @@
     if (checkImg) checkImg.style.display = 'inline-block';
     if (nomeArquivoSpan) nomeArquivoSpan.textContent = file.name;
     if (textoArraste) textoArraste.textContent = 'Enviando...';
+    if (botaoArquivo) {
+      botaoArquivo.classList.add('azul');
+      botaoArquivo.innerHTML = '<strong>RESUMO</strong>';
+    }
 
     const form = new FormData();
     form.append('arquivo', file);
