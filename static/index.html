@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <h1>RESUMA PDF</h1>
+</header>
+<section>
+    <div class="caixa">
+        <span id="voltar" class="seta-voltar">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <line x1="24" y1="16" x2="8" y2="16" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+            <polyline points="14,10 8,16 14,22" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <img id="logo" src="logo.png" alt="logo">
+        <div class="pesquisa-container">
+            <span class="lupa"><img id="lupa" src="lupa.png" alt=""></span>
+            <input type="text" class="barra-pesquisa" placeholder="Pesquisar">
+        </div>
+
+        <div class="arraste">
+            <img src="nuvem.png" alt="arrate-aqui" class="arraste-aqui" id="nuvem-img">
+            <img src="check.png" alt="Arquivo selecionado" class="pdf-icon" id="check-img" style="display:none;">
+            <p id="texto-arraste" style="font-weight: 600; margin-top: -10px;">ARRASTE AQUI</p>
+            <div id="arquivo-info" style="display:none;" class="arquivo-info">
+                <span id="nome-arquivo"></span>
+            </div>
+        </div>
+        <label for="fileInput" class="Botao_arquivo"><strong>SELECIONAR PDF</strong></label>
+        <input type="file" id="fileInput" style="display: none;">
+    </div>
+</section>
+<footer>
+    <p>&copy;Antonio Matheus</p>
+<footer>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>

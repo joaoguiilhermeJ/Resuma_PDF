@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Puxa o CSS da pasta static -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Resuma PDF</title>
+</head>
+<body>
+<header>
+    <h1>RESUMA PDF</h1>
+</header>
+<section>
+    <div class="caixa">
+        <span id="voltar" class="seta-voltar">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <line x1="24" y1="16" x2="8" y2="16" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+            <polyline points="14,10 8,16 14,22" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        
+        <img id="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Logo do sistema">
+
+        <div class="arraste" id="dropzone">
+            <img src="{{ url_for('static', filename='nuvem.png') }}" alt="Arraste aqui" class="arraste-aqui" id="nuvem-img">
+            <img src="{{ url_for('static', filename='check.png') }}" alt="Arquivo selecionado" class="pdf-icon" id="check-img" style="display:none;">
+            <p id="texto-arraste" style="font-weight: 600; margin-top: -10px;">ARRASTE AQUI</p>
+            <div id="arquivo-info" style="display:none;" class="arquivo-info">
+                <img src="{{ url_for('static', filename='x.png') }}" alt="Erro" id="erro-img" style="display:none; width:24px; height:24px;">
+                <span id="nome-arquivo"></span>
+                <p id="msg-erro" style="display:none; font-weight: bold; color: white;">Formato inválido</p>
+            </div>
+        </div>
+
+        <label for="fileInput" class="Botao_arquivo"><strong>SELECIONAR PDF</strong></label>
+        <input type="file" id="fileInput" accept=".pdf,application/pdf" style="display: none;">
+    </div>
+</section>
+<footer>
+    <div id="nomes">
+        <p>&copy; Antonio Matheus Pereira de Lima</p> 
+        <p>&copy; João Guilherme da Silva</p>
+        <p>&copy; Juan do Monte Pereira</p>
+    </div>
+</footer>
+
+<!-- Puxa o JS da pasta static -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

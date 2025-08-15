@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Resumo do PDF</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_resumo.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Resumo do Arquivo</h2>
+    <textarea id="resumoTexto">{{ resumo }}</textarea>
+    <div class="botoes">
+      <button onclick="copiarTexto()">Copiar</button>
+      <button onclick="salvarAlteracoes()">Salvar</button>
+      <a href="/" class="btn-voltar">Voltar</a>
+    </div>
+  </div>
+
+<script src="{{ url_for('static', filename='script_resumo.js') }}"></script>
+</body>
+</html>
