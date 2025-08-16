@@ -1,9 +1,15 @@
+
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from resumidor_pdf import ler_pdf, resumir_com_spacy
 import os, uuid
 
+# Carrega variáveis do .env se existir
+from dotenv import load_dotenv
+load_dotenv()
+
+
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.secret_key = 'sua_chave_secreta_aqui'
+app.secret_key = os.environ.get('SECRET_KEY', 'sua_chave_secreta_aqui')
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
