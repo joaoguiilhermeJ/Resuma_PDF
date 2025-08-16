@@ -2,3 +2,5 @@ flask
 pdfminer.six
 spacy
 python-dotenv
+Flask
+gunicorn
