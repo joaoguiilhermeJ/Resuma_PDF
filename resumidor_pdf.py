@@ -8,14 +8,11 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def _load_nlp() -> spacy.language.Language:
-    """
-    Tenta carregar o modelo de linguagem em Português.
-    Se falhar, cria um pipeline mínimo com sentencizer.
-    """
+    """Carrega o modelo em português ou usa pipeline mínimo."""
     try:
         return spacy.load("pt_core_news_sm")
     except Exception as e:
-        logging.warning(f"Falha ao carregar modelo spaCy: {e}. Usando pipeline mínimo.")
+        logging.warning(f"Falha ao carregar spaCy: {e}. Usando pipeline mínimo.")
         nlp = spacy.blank("pt")
         if "sentencizer" not in nlp.pipe_names:
             nlp.add_pipe("sentencizer")
@@ -24,20 +21,22 @@ def _load_nlp() -> spacy.language.Language:
 nlp = _load_nlp()
 
 def limpar_texto(texto: str) -> str:
+    """
+    Limpa o texto extraído do PDF:
+    - Remove quebras de linha
+    - Remove números soltos (ex: páginas, ISBN)
+    - Remove bullets e caracteres especiais
+    """
     if not texto:
         return ""
-    # remove bullets, símbolos, traços
-    texto = re.sub(r'[•◦●▪◆►–—\-]+', ' ', texto)
-    texto = re.sub(r'[(){}\[\]·]', ' ', texto)
-    texto = re.sub(r'[_=]+', ' ', texto)
-    texto = re.sub(r'\s+', ' ', texto)  # colapsa espaços
-    texto = re.sub(r'\b\d+\b', '', texto)  # remove números soltos
+    texto = re.sub(r"\s+", " ", texto)
+    texto = re.sub(r"\b\d+\b", "", texto)
+    texto = re.sub(r"(ISBN|CIP|Catalogação|Orientador|Orientadora|Conselho Editorial).*", "", texto, flags=re.I)
+    texto = texto.replace("•", "").replace("◦", "")
     return texto.strip()
 
 def ler_pdf(caminho_pdf: str) -> str:
-    """
-    Extrai texto de um PDF e aplica limpeza básica.
-    """
+    """Extrai texto de um PDF e aplica limpeza básica."""
     try:
         texto = extract_text(caminho_pdf) or ""
         return limpar_texto(texto)
@@ -47,44 +46,44 @@ def ler_pdf(caminho_pdf: str) -> str:
 
 def _frase_informativa(frase: str) -> bool:
     """
-    Filtra frases que provavelmente não agregam valor ao resumo:
-    - Muito curtas (menos de 8 palavras)
-    - Cabeçalhos em CAIXA ALTA
+    Mantém apenas frases que parecem narrativas relevantes:
+    - Pelo menos 5 palavras
+    - Não toda em maiúscula
+    - Ignora se conter palavras de autoria/ficha técnica
     """
-    palavras = frase.split()
-    if len(palavras) < 8:
+    if len(frase.split()) < 5:
         return False
     if frase.isupper():
         return False
+    blacklist = ["autor", "orientador", "secretaria", "universidade", "catalogação", "editorial"]
+    if any(palavra.lower() in frase.lower() for palavra in blacklist):
+        return False
     return True
 
-def resumir_com_spacy(texto: str, num_sentencas: int = 5) -> str:
+def resumir_com_spacy(texto: str, num_sentencas: int = 3) -> str:
+    """
+    Resume o texto:
+    - Filtra frases irrelevantes
+    - Ordena por peso (frequência de palavras)
+    - Retorna resumo curto e objetivo
+    """
     if not texto.strip():
-        logging.warning("Texto vazio fornecido para resumo.")
         return ""
-
-    # Limpeza extra para remover símbolos estranhos
-    texto = re.sub(r'[•◦●▪◆►–—\-]+', ' ', texto)  # substitui marcadores
-    texto = re.sub(r'[_=]+', ' ', texto)  # linhas horizontais
-    texto = re.sub(r'\s+', ' ', texto)  # espaços extras
 
     doc = nlp(texto)
     sentencas = [s.text.strip() for s in doc.sents if _frase_informativa(s.text.strip())]
 
     if not sentencas:
-        logging.warning("Nenhuma sentença válida encontrada.")
-        return texto.strip()[:500]
+        return texto.strip()[:400]
 
-    dinamico = max(3, min(8, len(sentencas) // 10))
-    num_sentencas = max(num_sentencas, dinamico)
+    # Reduz dinamicamente o tamanho: mínimo 2, máximo 5 frases
+    num_sentencas = max(2, min(5, num_sentencas))
 
+    # Frequência de palavras
     palavras = [t.lemma_.lower() for t in doc if t.is_alpha and not t.is_stop]
     frequencia = Counter(palavras)
 
-    keywords = {"scrum", "sprint", "product", "owner", "backlog", "ágil", "agile", "metodologia", "artefato", "cerimônia"}
-    for kw in keywords:
-        frequencia[kw] += 3
-
+    # Calcula peso das sentenças
     sentencas_com_peso = [
         (sum(frequencia.get(t.lemma_.lower(), 0) for t in nlp(s) if t.is_alpha), s)
         for s in sentencas
@@ -93,32 +92,22 @@ def resumir_com_spacy(texto: str, num_sentencas: int = 5) -> str:
     melhores = sorted(sentencas_com_peso, key=lambda x: x[0], reverse=True)
 
     resumo_frases = []
+    usados = set()
     for _, frase in melhores:
-        frase = frase.strip()
-
-        # Corta frases muito longas em pedaços menores
-        if len(frase.split()) > 25:
-            partes = re.split(r'(?<=[.!?])\s+', frase)
-            frase = partes[0]  # pega só a primeira parte
-
-        # Descarta frases redundantes
         tokens = set(frase.lower().split())
-        if all(len(tokens & set(f.lower().split())) / max(1, len(tokens)) < 0.5 for f in resumo_frases):
+        if all(len(tokens & set(f.lower().split())) / max(1, len(tokens)) < 0.6 for f in resumo_frases):
             resumo_frases.append(frase)
         if len(resumo_frases) >= num_sentencas:
             break
 
     resumo_frases = sorted(resumo_frases, key=lambda f: sentencas.index(f))
 
-    # Formata como tópicos
-    resumo_final = "\n".join([f"• {fr}" for fr in resumo_frases if fr])
-    return resumo_final
+    return " ".join(resumo_frases)
 
-
-# Teste rápido no terminal
+# Teste rápido
 if __name__ == "__main__":
     caminho = "documento_teste.pdf"
     texto = ler_pdf(caminho)
-    resumo = resumir_com_spacy(texto, num_sentencas=5)
+    resumo = resumir_com_spacy(texto, num_sentencas=3)
     print("\n--- Resumo Gerado ---\n")
     print(resumo)
